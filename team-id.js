@@ -3,9 +3,13 @@
   let busy=false;
 
   function inject(){
-    if(document.getElementById('teamIdPanel'))return;
     const intro=document.querySelector('.team-intro');
     if(!intro)return;
+    const introText=intro.querySelector('p');
+    if(introText)introText.textContent='Load your squad from your FPL Team ID for the most reliable match. Screenshot import remains available below for unpublished changes or manual correction.';
+    const note=document.querySelector('.team-note');
+    if(note)note.innerHTML='<strong>Screenshot import — fallback:</strong> use this when your latest transfers or lineup are not yet publicly available through FPL. Screenshot recognition can make mistakes, so confirm the detected players before using the projection.';
+    if(document.getElementById('teamIdPanel'))return;
     const panel=document.createElement('section');
     panel.id='teamIdPanel';
     panel.className='team-id-panel';
@@ -26,10 +30,9 @@
     for(let i=0;i<Math.min(15,picks.length);i++){
       const pick=picks[i];
       const player=document.querySelector(`[data-slot="${i}"]`);
-      const role=document.querySelector(`[data-role="${i}"]`);
       if(player){player.value=String(pick.playerId);player.dispatchEvent(new Event('change',{bubbles:true}));await new Promise(r=>setTimeout(r,25));}
-      const role2=document.querySelector(`[data-role="${i}"]`);
-      if(role2){role2.value=pick.role;role2.dispatchEvent(new Event('change',{bubbles:true}));await new Promise(r=>setTimeout(r,20));}
+      const role=document.querySelector(`[data-role="${i}"]`);
+      if(role){role.value=pick.role;role.dispatchEvent(new Event('change',{bubbles:true}));await new Promise(r=>setTimeout(r,20));}
     }
     await new Promise(r=>setTimeout(r,50));
     const cap=document.getElementById('captain');if(cap){cap.value=String(data.captainId||'');cap.dispatchEvent(new Event('change',{bubbles:true}));}
